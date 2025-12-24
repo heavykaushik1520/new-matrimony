@@ -1,0 +1,151 @@
+import React from "react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Heart, MapPin, GraduationCap, Briefcase, Lock } from "lucide-react";
+import { useAppContext } from "@/contexts/AppContext";
+import { useNavigate } from "react-router-dom";
+import { getData } from "@/store/utils";
+
+const ProfileCard = ({ profile, onViewDetails }) => {
+  const { isSubscribed, membershipActive } = useAppContext();
+  const navigate = useNavigate();
+
+  const formatHeight = (cm) => {
+    if (!cm) return "";
+
+    const totalInches = cm / 2.54;
+    const feet = Math.floor(totalInches / 12);
+    const inches = Math.round(totalInches % 12);
+
+    return `${feet}'${inches}''`;
+  };
+
+  const handleViewProfile = async () => {
+    try {
+      // prefer UUID id (profile.id), fallback to userId/personalId if present
+      // console.log("Profile :", profile);
+
+      const viewId = profile.id || profile.userId || profile.personalId;
+      if (!viewId) {
+        console.error(
+          "No view-id found on profile (id|userId|personalId missing)."
+        );
+        return;
+      }
+
+      // call dedicated API and use the .user payload if returned
+      const res = await getData(`user/auth/user/id/${viewId}`, null);
+
+      const payload = res?.user || res;
+
+      // navigate and pass fetched profile in state to avoid re-fetching
+      navigate(`/profiles/${viewId}`, { state: { profile: payload } });
+    } catch (err) {
+      console.error("Error fetching profile for view:", err);
+    }
+  };
+
+  return (
+    <Card className="group hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 bg-gradient-to-br from-white to-purple-50 border-2 border-transparent hover:border-purple-200">
+      <CardHeader className="pb-3">
+        <div className="flex items-center space-x-4">
+          <div className="relative w-16 h-16 rounded-full overflow-hidden shadow-lg">
+            {(profile.profilePhotos && profile.profilePhotos.length > 0) ||
+            profile.photo ? (
+              <img
+                src={profile.profilePhotos?.[0] || profile.photo}
+                alt={
+                  `${profile.firstname || ""} ${
+                    profile.lastname || ""
+                  }`.trim() ||
+                  profile.fullName ||
+                  "Profile"
+                }
+                className={`w-full h-full object-contain ${
+                  !membershipActive ? "blur-sm" : ""
+                }`}
+              />
+            ) : (
+              <div
+                className={`w-full h-full bg-gradient-to-br from-purple-400 to-pink-400 ${
+                  !membershipActive ? "blur-sm" : ""
+                }`}
+              />
+            )}
+            {!membershipActive && (
+              <div className="absolute inset-0 flex items-center justify-center text-white/90">
+                <Lock className="w-5 h-5" />
+              </div>
+            )}
+          </div>
+          <div className="flex-1">
+            <h3 className="font-bold text-xl text-gray-800 group-hover:text-purple-600 transition-colors">
+              {profile.firstname
+                ? `${profile.firstname}`
+                : profile.fullName || "Profile"}
+            </h3>
+            <p className="text-gray-600 flex items-center">
+              <MapPin className="w-4 h-4 mr-1" />
+              {profile.birthLocation || "N/A"}
+            </p>
+          </div>
+          <Badge
+            variant="secondary"
+            className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-700"
+          >
+            {profile.maritalStatus || "N/A"}
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-3">
+        <div className="grid grid-cols-2 gap-3 text-sm">
+          <div className="flex items-center">
+            <GraduationCap className="w-4 h-4 mr-2 text-blue-500" />
+            <span className="text-gray-700">
+              {profile.UserCareerInfo?.education || profile.education || "N/A"}
+            </span>
+          </div>
+          <div className="flex items-center">
+            <Briefcase className="w-4 h-4 mr-2 text-green-500" />
+            <span className="text-gray-700">
+              {profile.UserCareerInfo?.jobSector ||
+                profile.UserCareerInfo?.jobSector ||
+                profile.UserCareerInfo?.jobTitle ||
+                "N/A"}
+            </span>
+          </div>
+        </div>
+        {(profile.UserCareerInfo?.jobLocation || profile.jobLocation) && (
+          <div className="text-sm text-gray-600">
+            <MapPin className="w-4 h-4 inline mr-1" />
+            <span>
+              {profile.UserCareerInfo?.jobLocation || profile.jobLocation}
+            </span>
+          </div>
+        )}
+        <div className="flex justify-between items-center pt-3 border-t">
+          <div className="text-sm text-gray-600">
+            {profile.height && (
+              <span>
+                <span className="font-semibold">Height:{" "} 
+                  </span>{profile.height}cm | {"  "}
+                {formatHeight(profile.height)}
+              </span>
+            )}
+          </div>
+          <Button
+            onClick={handleViewProfile}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+            size="sm"
+          >
+            <Heart className="w-4 h-4 mr-1" />
+            View Profile
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+export default ProfileCard;
