@@ -10,7 +10,7 @@ import logo from '../assets/logo/logo-4.jpg';
 
 
 const ScrollToTop = () => {
-  const { pathname } = useLocation();
+  const { pathname } = useLocation(); 
   useEffect(() => {
     // instant or smooth depending on preference
     window.scrollTo({ top: 0, behavior: 'smooth' });
