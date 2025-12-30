@@ -182,6 +182,55 @@ export const postData = async (url, data) => {
   // console.log(" response ", response);
 };
 
+export const putData = async (url, data) => {
+  let authToken = localStorage.getItem("isAuthenticated");
+  return await axios
+    .request({
+      method: "put",
+      url: apiHost.baseURL + url,
+      data: data,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+    .then((response) => {
+      let tempData = response.data;
+      tempData.statusCode = response.status;
+      return tempData;
+    })
+    .catch(async (error) => {
+      let tempData = {};
+      if (error.response) {
+        if (error.response.status == 422) {
+          tempData.statusCode = error.response.status;
+          tempData.errors = error.response.data.errors;
+        } else if (error.response && error.response.status === 401) {
+          let refreshTokenResult = await refreshTokenAPi();
+          if (refreshTokenResult) {
+            return window.location.href = '/';
+          } else {
+            handleLogout();
+          }
+        } else {
+          if (error.response?.data) {
+            tempData.data = error.response?.data;
+          }
+        }
+        tempData.statusCode = error.response.status;
+      } else if (error.request) {
+        tempData.statusCode = 408;
+        tempData.message = "Server Timeout";
+        console.error("No response received:", error.request);
+      } else {
+        tempData.statusCode = 400;
+        tempData.message = "Error setting up the request";
+        console.error("Error setting up the request:", error.message);
+      }
+      return tempData;
+    });
+};
+
 export const postDataWithoutToken = async (url, data) => {
   // console.log(" data123===== ", data);
   console.log("url-----------", apiHost.baseURL + url);
@@ -227,4 +276,53 @@ export const postDataWithoutToken = async (url, data) => {
       return tempData;
     });
   // console.log(" response ", response);
+};
+
+export const putDataFormData = async (url, formData) => {
+  let authToken = localStorage.getItem("isAuthenticated");
+  return await axios
+    .request({
+      method: "put",
+      url: apiHost.baseURL + url,
+      data: formData,
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+    .then((response) => {
+      let tempData = response.data;
+      tempData.statusCode = response.status;
+      return tempData;
+    })
+    .catch(async (error) => {
+      let tempData = {};
+      if (error.response) {
+        if (error.response.status == 422) {
+          tempData.statusCode = error.response.status;
+          tempData.errors = error.response.data.errors;
+        } else if (error.response && error.response.status === 401) {
+          let refreshTokenResult = await refreshTokenAPi();
+          if (refreshTokenResult) {
+            return window.location.href = '/';
+          } else {
+            handleLogout();
+          }
+        } else {
+          if (error.response?.data) {
+            tempData.data = error.response?.data;
+          }
+        }
+        tempData.statusCode = error.response.status;
+      } else if (error.request) {
+        tempData.statusCode = 408;
+        tempData.message = "Server Timeout";
+        console.error("No response received:", error.request);
+      } else {
+        tempData.statusCode = 400;
+        tempData.message = "Error setting up the request";
+        console.error("Error setting up the request:", error.message);
+      }
+      return tempData;
+    });
 };
