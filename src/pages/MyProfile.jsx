@@ -17,15 +17,21 @@ import { getData, putData, putDataFormData } from "@/store/utils";
 import { toast } from "@/components/ui/use-toast";
 
 const MyProfile = () => {
-  const { myProfile, saveMyProfile, membershipActive, subscriptionActive, buyMembership, buySubscription, user } =
-    useAppContext();
+  const {
+    myProfile,
+    saveMyProfile,
+    membershipActive,
+    subscriptionActive,
+    buyMembership,
+    buySubscription,
+    user,
+  } = useAppContext();
   const [editing, setEditing] = useState(false);
   const [data, setData] = useState(null);
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
   const [photoFiles, setPhotoFiles] = useState([]); // Array of File objects for new uploads
   const [photoPreviews, setPhotoPreviews] = useState([]); // Array of preview URLs (contains existing + new)
-  
 
   const rawDate = data?.dateOfBirth || myProfile?.dateOfBirth;
   const birthDate = rawDate
@@ -33,14 +39,12 @@ const MyProfile = () => {
     : " ";
 
   const existingPhotos = data?.profilePhotos || myProfile?.profilePhotos || [];
-  
+
   // When editing, photoPreviews contains existing photos + new previews
   // When not editing, show existing photos
-  const photos = editing 
-    ? photoPreviews
-    : existingPhotos;
+  const photos = editing ? photoPreviews : existingPhotos;
 
-    console.log("photoFiles", photoFiles);
+  console.log("photoFiles", photoFiles);
   // Initialize form data when data loads
   useEffect(() => {
     if (data && !editing) {
@@ -62,7 +66,8 @@ const MyProfile = () => {
         height: data?.height || myProfile?.height || "",
         weight: data?.weight || myProfile?.weight || "",
         skinTone: data?.skinTone || myProfile?.skinTone || "",
-        physicalDisability: data?.physicalDisability || myProfile?.physicalDisability || "",
+        physicalDisability:
+          data?.physicalDisability || myProfile?.physicalDisability || "",
         hobbies: Array.isArray(data?.hobbies)
           ? data.hobbies.map((h) => h.replace(/[\[\]"]/g, "")).join(", ")
           : data?.hobbies || myProfile?.hobbies || "",
@@ -75,20 +80,43 @@ const MyProfile = () => {
         ras: data?.AstrologyInfo?.ras || user?.ras || "",
         fatherName: data?.FamilyInfo?.fatherName || user?.fatherName || "",
         motherName: data?.FamilyInfo?.motherName || user?.motherName || "",
-        brothersCount: data?.FamilyInfo?.brothersCount || user?.brothersCount || "",
-        sistersCount: data?.FamilyInfo?.sistersCount || user?.sistersCount || "",
-        liveWithFamily: data?.FamilyInfo?.liveWithFamily || user?.liveWithFamily || "",
+        brothersCount:
+          data?.FamilyInfo?.brothersCount || user?.brothersCount || "",
+        sistersCount:
+          data?.FamilyInfo?.sistersCount || user?.sistersCount || "",
+        liveWithFamily:
+          data?.FamilyInfo?.liveWithFamily || user?.liveWithFamily || "",
         relativesSurname: Array.isArray(data?.FamilyInfo?.relativesSurname)
           ? data.FamilyInfo.relativesSurname
               .map((h) => h.replace(/[\[\]"]/g, ""))
               .join(", ")
-          : data?.FamilyInfo?.relativesSurname || myProfile?.FamilyInfo?.relativesSurname || "",
-        education: data?.UserCareerInfo?.education || user?.UserCareerInfo?.education || "",
-        jobSector: data?.UserCareerInfo?.jobSector || user?.UserCareerInfo?.jobSector || "",
-        jobTitle: data?.UserCareerInfo?.jobTitle || user?.UserCareerInfo?.jobTitle || "",
-        annualSalary: data?.UserCareerInfo?.annualSalary || user?.UserCareerInfo?.annualSalary || "",
-        jobDescription: data?.UserCareerInfo?.jobDescription || user?.UserCareerInfo?.jobDescription || "",
-        jobLocation: data?.UserCareerInfo?.jobLocation || user?.UserCareerInfo?.jobLocation || "",
+          : data?.FamilyInfo?.relativesSurname ||
+            myProfile?.FamilyInfo?.relativesSurname ||
+            "",
+        education:
+          data?.UserCareerInfo?.education ||
+          user?.UserCareerInfo?.education ||
+          "",
+        jobSector:
+          data?.UserCareerInfo?.jobSector ||
+          user?.UserCareerInfo?.jobSector ||
+          "",
+        jobTitle:
+          data?.UserCareerInfo?.jobTitle ||
+          user?.UserCareerInfo?.jobTitle ||
+          "",
+        annualSalary:
+          data?.UserCareerInfo?.annualSalary ||
+          user?.UserCareerInfo?.annualSalary ||
+          "",
+        jobDescription:
+          data?.UserCareerInfo?.jobDescription ||
+          user?.UserCareerInfo?.jobDescription ||
+          "",
+        jobLocation:
+          data?.UserCareerInfo?.jobLocation ||
+          user?.UserCareerInfo?.jobLocation ||
+          "",
       });
     }
   }, [data, editing]);
@@ -99,15 +127,49 @@ const MyProfile = () => {
 
   const basicRows = useMemo(
     () => [
-      { label: "First Name", key: "firstname", value: data?.firstname || user?.firstname },
-      { label: "Last Name", key: "lastname", value: data?.lastname || user?.lastname },
-      { label: "Mobile No.", key: "phone", value: data?.phone || user?.phone, readOnly: true },
-      { label: "Email", key: "email", value: data?.email || user?.email, readOnly: true },
-      { label: "Gender", key: "gender", value: data?.gender || myProfile?.gender },
-      { label: "Religion", key: "religion", value: data?.religion || myProfile?.religion },
+      {
+        label: "First Name",
+        key: "firstname",
+        value: data?.firstname || user?.firstname,
+      },
+      {
+        label: "Last Name",
+        key: "lastname",
+        value: data?.lastname || user?.lastname,
+      },
+      {
+        label: "Mobile No.",
+        key: "phone",
+        value: data?.phone || user?.phone,
+        readOnly: true,
+      },
+      {
+        label: "Email",
+        key: "email",
+        value: data?.email || user?.email,
+        readOnly: true,
+      },
+      {
+        label: "Gender",
+        key: "gender",
+        value: data?.gender || myProfile?.gender,
+      },
+      {
+        label: "Religion",
+        key: "religion",
+        value: data?.religion || myProfile?.religion,
+      },
       { label: "Caste", key: "caste", value: data?.caste || myProfile?.caste },
-      { label: "Sub-Caste", key: "subCaste", value: data?.subCaste || myProfile?.subCaste },
-      { label: "Community", key: "community", value: data?.community || myProfile?.community },
+      {
+        label: "Sub-Caste",
+        key: "subCaste",
+        value: data?.subCaste || myProfile?.subCaste,
+      },
+      {
+        label: "Community",
+        key: "community",
+        value: data?.community || myProfile?.community,
+      },
       {
         label: "Date Of Birth",
         key: "dateOfBirth",
@@ -153,7 +215,11 @@ const MyProfile = () => {
         value: data?.weight || myProfile?.weight || "",
         suffix: " kg",
       },
-      { label: "Skin Tone", key: "skinTone", value: data?.skinTone || myProfile?.skinTone },
+      {
+        label: "Skin Tone",
+        key: "skinTone",
+        value: data?.skinTone || myProfile?.skinTone,
+      },
       {
         label: "Physical Disability",
         key: "physicalDisability",
@@ -173,17 +239,41 @@ const MyProfile = () => {
 
   const astrologyRow = useMemo(
     () => [
-      { label: "Charan", key: "charan", value: data?.AstrologyInfo?.charan || user?.charan },
-      { label: "Gan", key: "gan", value: data?.AstrologyInfo?.gan || user?.gan },
-      { label: "Gotra", key: "gotra", value: data?.AstrologyInfo?.gotra || user?.gotra },
-      { label: "Mangal", key: "mangal", value: data?.AstrologyInfo?.mangal || user?.mangal },
-      { label: "Nadis", key: "nadis", value: data?.AstrologyInfo?.nadis || user?.nadis },
+      {
+        label: "Charan",
+        key: "charan",
+        value: data?.AstrologyInfo?.charan || user?.charan,
+      },
+      {
+        label: "Gan",
+        key: "gan",
+        value: data?.AstrologyInfo?.gan || user?.gan,
+      },
+      {
+        label: "Gotra",
+        key: "gotra",
+        value: data?.AstrologyInfo?.gotra || user?.gotra,
+      },
+      {
+        label: "Mangal",
+        key: "mangal",
+        value: data?.AstrologyInfo?.mangal || user?.mangal,
+      },
+      {
+        label: "Nadis",
+        key: "nadis",
+        value: data?.AstrologyInfo?.nadis || user?.nadis,
+      },
       {
         label: "Nakshatra",
         key: "nakshatra",
         value: data?.AstrologyInfo?.nakshatra || user?.nakshatra,
       },
-      { label: "Raas", key: "ras", value: data?.AstrologyInfo?.ras || user?.ras },
+      {
+        label: "Raas",
+        key: "ras",
+        value: data?.AstrologyInfo?.ras || user?.ras,
+      },
     ],
     [data, myProfile, user]
   );
@@ -321,7 +411,8 @@ const MyProfile = () => {
         height: data?.height || myProfile?.height || "",
         weight: data?.weight || myProfile?.weight || "",
         skinTone: data?.skinTone || myProfile?.skinTone || "",
-        physicalDisability: data?.physicalDisability || myProfile?.physicalDisability || "",
+        physicalDisability:
+          data?.physicalDisability || myProfile?.physicalDisability || "",
         hobbies: Array.isArray(data?.hobbies)
           ? data.hobbies.map((h) => h.replace(/[\[\]"]/g, "")).join(", ")
           : data?.hobbies || myProfile?.hobbies || "",
@@ -334,20 +425,43 @@ const MyProfile = () => {
         ras: data?.AstrologyInfo?.ras || user?.ras || "",
         fatherName: data?.FamilyInfo?.fatherName || user?.fatherName || "",
         motherName: data?.FamilyInfo?.motherName || user?.motherName || "",
-        brothersCount: data?.FamilyInfo?.brothersCount || user?.brothersCount || "",
-        sistersCount: data?.FamilyInfo?.sistersCount || user?.sistersCount || "",
-        liveWithFamily: data?.FamilyInfo?.liveWithFamily || user?.liveWithFamily || "",
+        brothersCount:
+          data?.FamilyInfo?.brothersCount || user?.brothersCount || "",
+        sistersCount:
+          data?.FamilyInfo?.sistersCount || user?.sistersCount || "",
+        liveWithFamily:
+          data?.FamilyInfo?.liveWithFamily || user?.liveWithFamily || "",
         relativesSurname: Array.isArray(data?.FamilyInfo?.relativesSurname)
           ? data.FamilyInfo.relativesSurname
               .map((h) => h.replace(/[\[\]"]/g, ""))
               .join(", ")
-          : data?.FamilyInfo?.relativesSurname || myProfile?.FamilyInfo?.relativesSurname || "",
-        education: data?.UserCareerInfo?.education || user?.UserCareerInfo?.education || "",
-        jobSector: data?.UserCareerInfo?.jobSector || user?.UserCareerInfo?.jobSector || "",
-        jobTitle: data?.UserCareerInfo?.jobTitle || user?.UserCareerInfo?.jobTitle || "",
-        annualSalary: data?.UserCareerInfo?.annualSalary || user?.UserCareerInfo?.annualSalary || "",
-        jobDescription: data?.UserCareerInfo?.jobDescription || user?.UserCareerInfo?.jobDescription || "",
-        jobLocation: data?.UserCareerInfo?.jobLocation || user?.UserCareerInfo?.jobLocation || "",
+          : data?.FamilyInfo?.relativesSurname ||
+            myProfile?.FamilyInfo?.relativesSurname ||
+            "",
+        education:
+          data?.UserCareerInfo?.education ||
+          user?.UserCareerInfo?.education ||
+          "",
+        jobSector:
+          data?.UserCareerInfo?.jobSector ||
+          user?.UserCareerInfo?.jobSector ||
+          "",
+        jobTitle:
+          data?.UserCareerInfo?.jobTitle ||
+          user?.UserCareerInfo?.jobTitle ||
+          "",
+        annualSalary:
+          data?.UserCareerInfo?.annualSalary ||
+          user?.UserCareerInfo?.annualSalary ||
+          "",
+        jobDescription:
+          data?.UserCareerInfo?.jobDescription ||
+          user?.UserCareerInfo?.jobDescription ||
+          "",
+        jobLocation:
+          data?.UserCareerInfo?.jobLocation ||
+          user?.UserCareerInfo?.jobLocation ||
+          "",
       });
     }
   };
@@ -365,28 +479,21 @@ const MyProfile = () => {
   };
 
   const handlePhotoDelete = (url, index) => {
-    // Only allow deletion of newly uploaded photos (previews), not existing photos
-    const existingPhotosCount = existingPhotos.length;
-    const isExistingPhoto = index < existingPhotosCount;
-    
-    if (!isExistingPhoto) {
-      // Remove new photo (file + preview) before saving
-      const newPhotoIndex = index - existingPhotosCount;
-      const newPhotoFiles = [...photoFiles];
-      const newPhotoPreviews = [...photoPreviews];
-      
-      // Revoke the object URL to free memory (only for blob URLs, not existing photo URLs)
-      const previewUrl = newPhotoPreviews[index];
-      if (previewUrl && previewUrl.startsWith('blob:')) {
-        URL.revokeObjectURL(previewUrl);
+    const newPreviews = [...photoPreviews];
+    newPreviews.splice(index, 1);
+    setPhotoPreviews(newPreviews);
+
+    // If it's a newly uploaded photo → also remove file
+    if (url.startsWith("blob:")) {
+      const blobIndex = photoFiles.findIndex(
+        (file) => URL.createObjectURL(file) === url
+      );
+      if (blobIndex !== -1) {
+        const newFiles = [...photoFiles];
+        newFiles.splice(blobIndex, 1);
+        setPhotoFiles(newFiles);
       }
-      
-      // Remove from both arrays
-      newPhotoFiles.splice(newPhotoIndex, 1);
-      newPhotoPreviews.splice(index, 1);
-      
-      setPhotoFiles(newPhotoFiles);
-      setPhotoPreviews(newPhotoPreviews);
+      URL.revokeObjectURL(url);
     }
   };
 
@@ -395,7 +502,7 @@ const MyProfile = () => {
     try {
       // Always use FormData to handle photos and profile data
       const fd = new FormData();
-      
+
       // Add text fields
       if (formData.firstname) fd.append("firstname", formData.firstname);
       if (formData.lastname) fd.append("lastname", formData.lastname);
@@ -406,60 +513,86 @@ const MyProfile = () => {
       if (formData.community) fd.append("community", formData.community);
       if (formData.dateOfBirth) fd.append("dateOfBirth", formData.dateOfBirth);
       if (formData.timeOfBirth) fd.append("timeOfBirth", formData.timeOfBirth);
-      if (formData.birthLocation) fd.append("birthLocation", formData.birthLocation);
-      if (formData.knownLanguages) fd.append("knownLanguages", formData.knownLanguages);
+      if (formData.birthLocation)
+        fd.append("birthLocation", formData.birthLocation);
+      if (formData.knownLanguages)
+        fd.append("knownLanguages", formData.knownLanguages);
       if (formData.diet) fd.append("diet", formData.diet);
-      if (formData.maritalStatus) fd.append("maritalStatus", formData.maritalStatus);
+      if (formData.maritalStatus)
+        fd.append("maritalStatus", formData.maritalStatus);
       if (formData.bloodGroup) fd.append("bloodGroup", formData.bloodGroup);
       if (formData.height) fd.append("height", parseInt(formData.height));
       if (formData.weight) fd.append("weight", parseInt(formData.weight));
       if (formData.skinTone) fd.append("skinTone", formData.skinTone);
-      if (formData.physicalDisability) fd.append("physicalDisability", formData.physicalDisability);
+      if (formData.physicalDisability)
+        fd.append("physicalDisability", formData.physicalDisability);
       if (formData.hobbies) {
         const hobbiesArray = Array.isArray(formData.hobbies)
           ? formData.hobbies
-          : formData.hobbies.split(",").map((s) => s.trim()).filter(Boolean);
+          : formData.hobbies
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean);
         fd.append("hobbies", JSON.stringify(hobbiesArray));
       }
 
       // Add nested objects as JSON strings
-      fd.append("AstrologyInfo", JSON.stringify({
-        charan: formData.charan || "",
-        gan: formData.gan || "",
-        gotra: formData.gotra || "",
-        mangal: formData.mangal || "",
-        nadis: formData.nadis || "",
-        nakshatra: formData.nakshatra || "",
-        ras: formData.ras || "",
-      }));
+      fd.append(
+        "AstrologyInfo",
+        JSON.stringify({
+          charan: formData.charan || "",
+          gan: formData.gan || "",
+          gotra: formData.gotra || "",
+          mangal: formData.mangal || "",
+          nadis: formData.nadis || "",
+          nakshatra: formData.nakshatra || "",
+          ras: formData.ras || "",
+        })
+      );
 
-      fd.append("FamilyInfo", JSON.stringify({
-        fatherName: formData.fatherName || "",
-        motherName: formData.motherName || "",
-        brothersCount: formData.brothersCount ? parseInt(formData.brothersCount) : 0,
-        sistersCount: formData.sistersCount ? parseInt(formData.sistersCount) : 0,
-        liveWithFamily: formData.liveWithFamily || "",
-        relativesSurname: Array.isArray(formData.relativesSurname)
-          ? formData.relativesSurname
-          : (formData.relativesSurname || "").split(",").map((s) => s.trim()).filter(Boolean),
-      }));
+      fd.append(
+        "FamilyInfo",
+        JSON.stringify({
+          fatherName: formData.fatherName || "",
+          motherName: formData.motherName || "",
+          brothersCount: formData.brothersCount
+            ? parseInt(formData.brothersCount)
+            : 0,
+          sistersCount: formData.sistersCount
+            ? parseInt(formData.sistersCount)
+            : 0,
+          liveWithFamily: formData.liveWithFamily || "",
+          relativesSurname: Array.isArray(formData.relativesSurname)
+            ? formData.relativesSurname
+            : (formData.relativesSurname || "")
+                .split(",")
+                .map((s) => s.trim())
+                .filter(Boolean),
+        })
+      );
 
-      fd.append("UserCareerInfo", JSON.stringify({
-        education: formData.education || "",
-        jobSector: formData.jobSector || "",
-        jobTitle: formData.jobTitle || "",
-        annualSalary: formData.annualSalary || "",
-        jobDescription: formData.jobDescription || "",
-        jobLocation: formData.jobLocation || "",
-      }));
+      fd.append(
+        "UserCareerInfo",
+        JSON.stringify({
+          education: formData.education || "",
+          jobSector: formData.jobSector || "",
+          jobTitle: formData.jobTitle || "",
+          annualSalary: formData.annualSalary || "",
+          jobDescription: formData.jobDescription || "",
+          jobLocation: formData.jobLocation || "",
+        })
+      );
 
       // Separate existing photos (URLs) from new photos (blob URLs)
-      const existingPhotoUrls = photoPreviews.filter(url => !url.startsWith('blob:'));
-      
+      const existingPhotoUrls = photoPreviews.filter(
+        (url) => !url.startsWith("blob:")
+      );
+
       // Add existing photo URLs as JSON array
-      if (existingPhotoUrls.length > 0) {
-        fd.append("existingProfilePhotos", JSON.stringify(existingPhotoUrls));
-      }
+      fd.append(
+        "existingProfilePhotos",
+        JSON.stringify(existingPhotoUrls || [])
+      );
 
       // Add new photo files
       photoFiles.forEach((file) => {
@@ -467,7 +600,7 @@ const MyProfile = () => {
       });
 
       const response = await putDataFormData(`user/auth/update`, fd);
-      
+
       if (response?.statusCode === 200 || response?.statusCode === 201) {
         toast({
           title: "Profile Updated",
@@ -477,8 +610,8 @@ const MyProfile = () => {
         setPhotoFiles([]);
         setPhotoPreviews([]);
         // Clean up object URLs (only blob URLs)
-        photoPreviews.forEach(url => {
-          if (url.startsWith('blob:')) {
+        photoPreviews.forEach((url) => {
+          if (url.startsWith("blob:")) {
             URL.revokeObjectURL(url);
           }
         });
@@ -486,7 +619,8 @@ const MyProfile = () => {
       } else {
         toast({
           title: "Update Failed",
-          description: response?.message || "Failed to update profile. Please try again.",
+          description:
+            response?.message || "Failed to update profile. Please try again.",
           variant: "destructive",
         });
       }
@@ -505,7 +639,7 @@ const MyProfile = () => {
   const renderField = (row) => {
     if (editing && !row.readOnly) {
       const fieldValue = formData[row.key] || "";
-      
+
       if (row.type === "textarea") {
         return (
           <Textarea
@@ -564,7 +698,9 @@ const MyProfile = () => {
       }
       return (
         <div className="text-gray-900 mt-1">
-          {row.readOnly && <span className="text-gray-400 text-xs">(Read-only)</span>}
+          {row.readOnly && (
+            <span className="text-gray-400 text-xs">(Read-only)</span>
+          )}
           <div className={row.readOnly ? "mt-1" : ""}>{displayValue}</div>
         </div>
       );
@@ -573,26 +709,26 @@ const MyProfile = () => {
 
   return (
     <div className="space-y-6">
-        <Card>
-          <CardContent className="p-4">
-            <div className="text-base font-semibold text-gray-800 mb-3">
-              Your Photos
-            </div>
+      <Card>
+        <CardContent className="p-4">
+          <div className="text-base font-semibold text-gray-800 mb-3">
+            Your Photos
+          </div>
           {photos.length > 0 || editing ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {photos.map((url, index) => {
                 // Only show delete button for newly uploaded photos (previews), not existing photos
                 const isNewPhoto = index >= existingPhotos.length;
                 return (
-                <div
-                  key={index}
+                  <div
+                    key={index}
                     className="relative w-full h-48 overflow-hidden rounded-lg border group"
-                >
-                  <img
-                    src={url}
-                    alt={`Profile ${index + 1}`}
-                    className="w-full h-full object-cover"
-                  />
+                  >
+                    <img
+                      src={url}
+                      alt={`Profile ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                     {editing && isNewPhoto && (
                       <button
                         onClick={() => handlePhotoDelete(url, index)}
@@ -605,7 +741,7 @@ const MyProfile = () => {
                   </div>
                 );
               })}
-              
+
               {editing && (
                 <label className="relative w-full h-48 flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-purple-500 transition-colors">
                   <input
@@ -621,15 +757,15 @@ const MyProfile = () => {
                   </div>
                 </label>
               )}
-                </div>
+            </div>
           ) : (
             <div className="text-center py-8 text-gray-500">
               <ImageIcon className="w-12 h-12 mx-auto mb-2 text-gray-300" />
               <p>No photos uploaded yet</p>
             </div>
           )}
-          </CardContent>
-        </Card>
+        </CardContent>
+      </Card>
 
       <Card>
         <CardContent className="p-5 flex items-center justify-between">
@@ -665,7 +801,7 @@ const MyProfile = () => {
         <CardContent className="p-4">
           <div className="flex items-center justify-between mb-3">
             <div className="text-base font-semibold text-gray-800">
-            Basic Information
+              Basic Information
             </div>
             {!editing && (
               <Button
